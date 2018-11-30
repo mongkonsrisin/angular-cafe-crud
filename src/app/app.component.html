@@ -1,20 +1,131 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="container">
+  <section class="py-4 text-center text-lg-left">
+
+    <!-- HEAD -->
+    <h2 class="h1 font-weight-bold text-center text-danger">Angular CAFE</h2>
+    <p class="text-center mb-5 pb-3">{{ lipsum }}</p>
+    <!-- HEAD -->
+
+    <!-- BUTTON -->
+    <div class="text-right mb-3">
+      <button type="button" class="btn btn-primary waves-light" mdbWavesEffect data-toggle="modal" (click)="onCreateFormModal()"><strong>ADD</strong></button>
+    </div>
+    <!-- BUTTON -->
+
+    <!-- ALERT -->
+    <div class="alert alert-danger" role="alert" *ngIf="items.length === 0">
+      <h4 class="alert-heading"><strong><i class="fa fa-heart"></i> I love Angular!</strong></h4>
+      <p>{{ angular }}</p>
+    </div>
+    <!-- ALERT -->
+
+    <!-- ITEM -->
+    <div class="row food" *ngFor="let item of items">
+      <div class="col-lg-5 col-xl-5 pb-3">
+        <div class="view overlay rounded z-depth-2 waves-light" mdbWavesEffect>
+          <img [src]="item.image" class="img-fluid">
+        </div>
+      </div>
+      <div class="col-lg-7 col-xl-7">
+        <div class="float-right">
+          <strong>
+            <a class="text-warning" (click)="onEdit(item)"><i class="fa fa-edit"></i> EDIT</a> | <a class="text-danger" (click)="onConfirm(item)"><i class="fa fa-trash"></i> DELETE</a>
+          </strong>
+        </div>
+        <br>
+        <h6 class="font-weight-bold pb-1 green-text"><i class="fa fa-cutlery"></i> Food</h6>
+        <h3 class="mb-4 font-weight-bold dark-grey-text"><strong>{{ item.title }}</strong></h3>
+        <p>{{ item.detail }}</p>
+        <p class="text-muted"><small><strong> <i class="fa fa-calendar"></i></strong> {{ item.date | date : 'dd MMMM yyyy | HH:mm:ss' }}</small></p>
+        <button mdbBtn type="button" color="green" class="buy waves-light" mdbWavesEffect><strong>{{ item.price }} THB</strong></button>
+      </div>
+    </div>
+    <!-- ITEM -->
+
+  </section>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+
+<!-- MODAL -->
+<div [config]="{backdrop:'static'}" mdbModal #formModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">FORM</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="formModal.hide()">
+          <span aria-hidden="true"><i class="fa fa-close"></i></span>
+        </button>
+      </div>
+
+
+      <div class="modal-body mx-3">
+
+        <div class="text-center">
+          <img [src]="getImageURL()" alt="thumbnail" class="text-center img-thumbnail" style="width: 200px">
+        </div>
+
+        <div class="md-form mb-5">
+          <i class="fa fa-cutlery prefix grey-text"></i>
+          <input formControlName="title" type="text" id="title" class="form-control" mdbInputDirective>
+          <label for="title">Title</label>
+        </div>
+
+        <div class="md-form mb-5">
+          <i class="fa fa-image prefix grey-text"></i>
+          <input formControlName="image" type="text" id="image" class="form-control" mdbInputDirective>
+          <label for="image">Image</label>
+            <small class="text-primary float-right random" (click)="generateRandomImage()"><i class="fa fa-random"></i> Random</small>
+        </div>
+
+        <div class="md-form mb-5">
+          <i class="fa fa-btc prefix grey-text"></i>
+          <input formControlName="price" type="text" id="price" class="form-control" mdbInputDirective>
+          <label for="price">Price</label>
+        </div>
+
+        <div class="md-form">
+          <i class="fa fa-info-circle prefix grey-text"></i>
+          <textarea formControlName="detail" type="text" id="detail" class="md-textarea form-control" rows="1" mdbInputDirective></textarea>
+          <label for="detail">Detail</label>
+        </div>
+
+      </div>
+
+      <div class="modal-footer d-flex justify-content-center">
+        <button [disabled]="formGroup.invalid" mdbBtn class="btn-success btn-block  waves-light" mdbWavesEffect><strong>SAVE</strong></button>
+      </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+<!-- MODAL -->
+
+<!-- MODAL -->
+<div [config]="{backdrop:'static'}" mdbModal #deleteModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">DELETE CONFIRMATION</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="deleteModal.hide()">
+          <span aria-hidden="true"><i class="fa fa-close"></i></span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        You're going to delete <strong>{{ formGroup.value['title'] }}</strong>. Are you sure ?
+      </div>
+
+      <div class="modal-footer d-flex justify-content-center">
+          <button mdbBtn class="btn-danger btn-block  waves-light" mdbWavesEffect (click)="onDelete()"><strong>DELETE</strong></button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  <!-- MODAL -->
 

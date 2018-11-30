@@ -1,0 +1,14 @@
+.food:not(:last-child) {
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+
+.buy {
+  font-size: 1em;
+}
+
+.random:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
